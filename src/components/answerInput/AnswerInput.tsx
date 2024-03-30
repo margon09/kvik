@@ -39,6 +39,7 @@ const AnswerInput = ({ value, onChange, answerState, setAnswerState }: Props) =>
   return (
     <StyledAnswerInput>
       <StyledInput 
+        data-cy='input'
         onFocus={handleFocus} 
         onBlur={handleBlur}
         $isFocused={isFocused}

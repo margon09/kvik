@@ -66,7 +66,7 @@ const [answerState, setAnswerState] = useState(InputState.Default)
             <TaskDescriptionInDanish>
               <MessageBubble>{problem?.description}</MessageBubble>
             </TaskDescriptionInDanish>
-            <AnswerInEnglish> {problem?.problemText && problem?.problemText.substring(0, problem?.problemText.indexOf("{{input0}}"))}
+            <AnswerInEnglish data-cy='problem-text'> {problem?.problemText && problem?.problemText.substring(0, problem?.problemText.indexOf("{{input0}}"))}
               <AnswerInput 
                 value={userAnswer} 
                 onChange={setUserAnswer}
@@ -76,7 +76,7 @@ const [answerState, setAnswerState] = useState(InputState.Default)
               {problem?.problemText && problem.problemText.substring(problem.problemText.indexOf("{{input0}}") + "{{input0}}".length)}</AnswerInEnglish>
           </TaskFormContainer>
         </Task>
-        <Button 
+        <Button
           type='submit' 
           onClick={checkAnswer}
           answerState = {answerState}

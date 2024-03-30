@@ -12,6 +12,7 @@ interface Props {
 const Button = ({ onClick, type = "button", children, isFocused, answerState }: Props) => {
   return (
     <StyledButton 
+      data-cy='button' 
       onClick={onClick} 
       type={type} 
       $isFocused={isFocused} 
