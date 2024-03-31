@@ -115,3 +115,33 @@ export const AnswerInEnglish = styled.div`
   margin: 0rem 0 1rem 1.8rem;
   padding: 1rem;
 `
+
+export const SpinnerContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-0%, -0%);
+  height: 100vh;
+
+  svg {
+    margin-top: 0.2rem;
+    font-size: 4rem;
+    color: ${({ theme }) => theme.colors.borderColor};
+    animation: rotate 2s linear infinite;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.phone} {
+    top: 45%;
+    left: 45%;
+  }
+`

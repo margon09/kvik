@@ -7,7 +7,8 @@ KvikImgContainer,
 TaskFormContainer,
 Task,
 TaskDescriptionInDanish,
-AnswerInEnglish
+AnswerInEnglish,
+SpinnerContainer
 } from './KvikForm.styles'
 import KvikDefault from '../svgComponents/KvikDefault'
 import Button from '../UI/button/Button'
@@ -21,19 +22,22 @@ import KvikWrongAnswerTwice from '../svgComponents/KvikWrongAnswerTwice'
 import KvikWrongAnswer from '../svgComponents/KvikWrongAnswer'
 import TryAgain from '../svgComponents/TryAgain'
 import NextTask from '../svgComponents/NextTask'
-
+import { ImSpinner } from "react-icons/im"
 
 const KvikForm = () => {
 const [userAnswer, setUserAnswer] = useState('')
 const [problem, setProblem] = useState({} as any)
 const [answerState, setAnswerState] = useState(InputState.Default)
-
+const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    getProblem().then(p => setProblem(p))
+    setIsLoading(true)
+    getProblem(setIsLoading)
+      .then(p => setProblem(p))
+      .catch(error => {
+        console.error('Error fetching problem:', error)
+      })
   }, [])
-
-
 
   const checkAnswer = () => { 
     if(userAnswer === ''){
@@ -44,9 +48,18 @@ const [answerState, setAnswerState] = useState(InputState.Default)
       setUserAnswer('')
       return
     }
-    checkTheAnswer(userAnswer).then(res => res.correctAnswer.input0 === userAnswer 
+    checkTheAnswer(userAnswer, setIsLoading)
+    .then(res => res.correctAnswer.input0 === userAnswer 
       ? setAnswerState(InputState.Correct) 
       : setAnswerState(answerState === InputState.Error ?  InputState.MoreError : InputState.Error))  
+  }
+
+  if (isLoading) {
+    return (
+      <SpinnerContainer data-cy='loading-spinner' data-testid='loading-spinner'>
+        <ImSpinner />
+      </SpinnerContainer>
+    );
   }
 
     return (

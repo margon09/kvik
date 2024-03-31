@@ -9,22 +9,28 @@ const axiosInstance = axios.create({
 })
 
 // Service call to get a problem
-const getProblem = async () => {
+const getProblem = async (setIsLoading: (loading: boolean) => void) => {
   try {
+    setIsLoading(true)
     const response = await axiosInstance.get('/problem')
+    setIsLoading(false)
     return response.data
   } catch (error) {
+    setIsLoading(false)
     console.error('Error fetching problem:', error)
     throw error
   }
 }
 
 // Service call to check an answer
-const checkTheAnswer = async (input: string) => {
+const checkTheAnswer = async (input: string, setIsLoading: (loading: boolean) => void) => {
   try {
+    setIsLoading(true)
     const response = await axiosInstance.post('/check', {input})
+    setIsLoading(false)
     return response.data
   } catch (error) {
+    setIsLoading(false)
     console.error('Error checking answer:', error)
     throw error
   }
