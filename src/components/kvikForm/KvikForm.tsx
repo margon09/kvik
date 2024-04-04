@@ -49,7 +49,7 @@ const [isLoading, setIsLoading] = useState(false)
       return
     }
     checkTheAnswer(userAnswer, setIsLoading)
-    .then(res => res.correctAnswer.input0 === userAnswer 
+    .then(res => res.isCorrect
       ? setAnswerState(InputState.Correct) 
       : setAnswerState(answerState === InputState.Error ?  InputState.MoreError : InputState.Error))  
   }

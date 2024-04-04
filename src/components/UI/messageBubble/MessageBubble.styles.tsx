@@ -11,13 +11,10 @@ export const StyledMessageContainer = styled.div `
 export const Triangle = styled.div `
   width: 0;
   height: 0;
-  // height
   border-top: 18px solid transparent;
   border-bottom: 18px solid transparent;
-  // base
   border-right: 25px solid white;
   position: relative;
-  // covers rect
   left: 10px;
 
   &::before,
@@ -27,19 +24,16 @@ export const Triangle = styled.div `
     top: 50%;
     left: 0;
     width: 20px;
-    // line height
     height: 2px;
     background: ${({ theme }) => theme.colors.input};
     transform-origin: 0 0;
   }
 
   &::before {
-    // line upwards
     transform: translateY(-50%) rotate(-38deg);
   }
 
   &::after {
-    // line downwards
     transform: translateY(-50%) rotate(38deg);
   }
 `
