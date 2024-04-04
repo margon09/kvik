@@ -2,7 +2,6 @@ describe('KvikForm', () => {
   beforeEach(() => {
     cy.visit('/')
 
-    // Mock GET /problem response
     cy.intercept('GET', 'https://glkltp5rvo76hkmz4fraevhshu0yluco.lambda-url.eu-central-1.on.aws/problem', {
       statusCode: 200,
       body: {
@@ -12,16 +11,15 @@ describe('KvikForm', () => {
       },
     }).as('getProblem')
 
-    // Mock POST /check response for the answer
     cy.intercept('POST', 'https://glkltp5rvo76hkmz4fraevhshu0yluco.lambda-url.eu-central-1.on.aws/check', (req) => {
         req.reply({
           statusCode: 200,
           body: {
-            correctAnswer: { input0: 'dog' },
+            isCorrect: true,
+            correctAnswer: { input0: 'dog' }
           },
         });
     }).as('checkAnswer')
-
   })
 
   it('should display introduction text', () => {
@@ -37,7 +35,6 @@ describe('KvikForm', () => {
   cy.get('[data-cy="input"]').focus()
   cy.get('[data-cy="problem-text"]').should('contain', 'Problem Text start').should('contain', 'problem text end')
 })
-
 
   it('should have an empty input field initially', () => {
     cy.get('[data-cy="input"]').should('have.value', '')
@@ -60,11 +57,24 @@ describe('KvikForm', () => {
   })
 
   it('should change button name to "Prøv igen" for wrong answer', () => {
+
+        cy.intercept('POST', 'https://glkltp5rvo76hkmz4fraevhshu0yluco.lambda-url.eu-central-1.on.aws/check', (req) => {
+        req.reply({
+          statusCode: 200,
+          body: {
+            isCorrect: false,
+            correctAnswer: { input0: 'dog' }
+          },
+        });
+    }).as('checkAnswer')
+
     cy.get('[data-cy="input"]').should('have.value', '')
 
-    cy.get('[data-cy="input"]').focus().type('IncorrectAnswer')
+    cy.get('[data-cy="input"]').focus().type('wrong')
 
-    cy.get('[data-cy="button"]').should('be.visible').click().click()
+    // eslint-disable-next-line testing-library/await-async-utils
+    cy.get('[data-cy="button"]').should('be.visible').click().wait(3000)
+    cy.get('[data-cy="button"]').should('be.visible').click()
 
     cy.wait('@checkAnswer').then(() => {
       cy.get('[data-cy="button"]').should('have.text', 'Prøv igen')
