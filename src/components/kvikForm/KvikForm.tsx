@@ -30,6 +30,15 @@ const [problem, setProblem] = useState({} as any)
 const [answerState, setAnswerState] = useState(InputState.Default)
 const [isLoading, setIsLoading] = useState(false)
 
+const svgComponents = {
+  [InputState.Default]: KvikDefault,
+  [InputState.Error]: KvikWrongAnswer,
+  [InputState.MoreError]: KvikWrongAnswerTwice,
+  [InputState.Correct]: KvikCorrect,
+  [InputState.Correcting]: KvikCorrecting
+}
+const CurrentSVGComponent = svgComponents[answerState]
+
   useEffect(() => {
     setIsLoading(true)
     getProblem(setIsLoading)
@@ -69,11 +78,7 @@ const [isLoading, setIsLoading] = useState(false)
       <TaskContainer>
         <Task>
           <KvikImgContainer>
-            {answerState === InputState.Default && <KvikDefault />}
-            {answerState === InputState.Error && <KvikWrongAnswer />}
-            {answerState === InputState.MoreError && <KvikWrongAnswerTwice />}
-            {answerState === InputState.Correct && <KvikCorrect />}
-            {answerState === InputState.Correcting && <KvikCorrecting />}
+            <CurrentSVGComponent />
           </KvikImgContainer>
           <TaskFormContainer>
             <TaskDescriptionInDanish>
