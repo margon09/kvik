@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { 
 StyledFormContainer, 
 TaskText, 
@@ -30,13 +30,13 @@ const [problem, setProblem] = useState({} as any)
 const [answerState, setAnswerState] = useState(InputState.Default)
 const [isLoading, setIsLoading] = useState(false)
 
-const svgComponents = {
-  [InputState.Default]: KvikDefault,
-  [InputState.Error]: KvikWrongAnswer,
-  [InputState.MoreError]: KvikWrongAnswerTwice,
-  [InputState.Correct]: KvikCorrect,
-  [InputState.Correcting]: KvikCorrecting
-}
+const svgComponents = useMemo(() => ({
+    [InputState.Default]: KvikDefault,
+    [InputState.Error]: KvikWrongAnswer,
+    [InputState.MoreError]: KvikWrongAnswerTwice,
+    [InputState.Correct]: KvikCorrect,
+    [InputState.Correcting]: KvikCorrecting
+  }), [])
 const CurrentSVGComponent = svgComponents[answerState]
 
   useEffect(() => {
@@ -63,6 +63,10 @@ const CurrentSVGComponent = svgComponents[answerState]
       : setAnswerState((answerState === InputState.Error || answerState === InputState.Correcting) ?  InputState.MoreError : InputState.Error))  
   }
 
+  const handleChange = useCallback((value: string) => {
+    setUserAnswer(value)
+  }, [])
+
   if (isLoading) {
     return (
       <SpinnerContainer data-cy='loading-spinner' data-testid='loading-spinner'>
@@ -87,7 +91,7 @@ const CurrentSVGComponent = svgComponents[answerState]
             <AnswerInEnglish data-cy='problem-text'> {problem?.problemText && problem?.problemText.substring(0, problem?.problemText.indexOf("{{input0}}"))}
               <AnswerInput 
                 value={userAnswer} 
-                onChange={setUserAnswer}
+                onChange={handleChange}
                 answerState = {answerState}
                 setAnswerState = {setAnswerState}
               /> 
