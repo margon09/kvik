@@ -7,7 +7,7 @@ interface Props {
 
 const MessageBubble = ({children}: Props) => {
   return (
-    <StyledMessageContainer>
+    <StyledMessageContainer data-testid='message-bubble'>
       <Triangle />
       <StyledMessageBubble>{children && Parser(children)}
       </StyledMessageBubble>

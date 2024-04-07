@@ -23,6 +23,8 @@ import KvikWrongAnswer from '../svgComponents/KvikWrongAnswer'
 import TryAgain from '../svgComponents/TryAgain'
 import NextTask from '../svgComponents/NextTask'
 import { ImSpinner } from "react-icons/im"
+import React from 'react'
+import { splitTextByInputs } from '../utils/textUtils'
 
 const KvikForm = () => {
 const [userAnswer, setUserAnswer] = useState('')
@@ -67,14 +69,18 @@ const CurrentSVGComponent = svgComponents[answerState]
     setUserAnswer(value)
   }, [])
 
+  const splitText = useMemo(() => {
+    return splitTextByInputs(problem?.problemText || '')
+}, [problem?.problemText])
+
   if (isLoading) {
     return (
       <SpinnerContainer data-cy='loading-spinner' data-testid='loading-spinner'>
         <ImSpinner />
       </SpinnerContainer>
-    );
+    )
   }
-
+  
     return (
     <StyledFormContainer>
       {problem && <>
@@ -88,14 +94,20 @@ const CurrentSVGComponent = svgComponents[answerState]
             <TaskDescriptionInDanish>
               <MessageBubble>{problem?.description}</MessageBubble>
             </TaskDescriptionInDanish>
-            <AnswerInEnglish data-cy='problem-text'> {problem?.problemText && problem?.problemText.substring(0, problem?.problemText.indexOf("{{input0}}"))}
-              <AnswerInput 
-                value={userAnswer} 
-                onChange={handleChange}
-                answerState = {answerState}
-                setAnswerState = {setAnswerState}
-              /> 
-              {problem?.problemText && problem.problemText.substring(problem.problemText.indexOf("{{input0}}") + "{{input0}}".length)}</AnswerInEnglish>
+            <AnswerInEnglish data-cy='problem-text'> 
+              {splitText.map((part: string, index: number) => (
+                <React.Fragment key={index}>
+                  {part}
+                  {index !== splitText.length - 1 && 
+                  <AnswerInput
+                    value={userAnswer}
+                    onChange={handleChange}
+                    answerState={answerState}
+                    setAnswerState={setAnswerState}
+                  />}
+                </React.Fragment>
+              ))}
+            </AnswerInEnglish>
           </TaskFormContainer>
         </Task>
         <Button

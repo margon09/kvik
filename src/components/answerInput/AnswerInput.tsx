@@ -40,6 +40,7 @@ const AnswerInput = ({ value, onChange, answerState, setAnswerState }: Props) =>
     <StyledAnswerInput>
       <StyledInput 
         data-cy='input'
+        data-testid='input'
         onFocus={handleFocus} 
         onBlur={handleBlur}
         $isFocused={isFocused}
@@ -51,9 +52,9 @@ const AnswerInput = ({ value, onChange, answerState, setAnswerState }: Props) =>
         $answerState={answerState}
         disabled={answerState === InputState.MoreError || answerState === InputState.Correct}
       />
-      <Icon>
-          {answerState === InputState.MoreError && <Error />}
-          {answerState === InputState.Correct && <Correct />}
+      <Icon >
+          {answerState === InputState.MoreError && <span data-testid='error-icon'><Error /></span>}
+          {answerState === InputState.Correct && <span data-testid='correct-icon'><Correct /></span>}
       </Icon>
     </StyledAnswerInput>
   )

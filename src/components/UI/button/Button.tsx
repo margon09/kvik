@@ -13,6 +13,7 @@ const Button = ({ onClick, type = "button", children, isFocused, answerState }: 
   return (
     <StyledButton 
       data-cy='button' 
+      data-testid='submit-button' 
       onClick={onClick} 
       type={type} 
       $isFocused={isFocused} 
