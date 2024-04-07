@@ -49,7 +49,7 @@ const AnswerInput = ({ value, onChange, answerState, setAnswerState }: Props) =>
         onChange={handleChange}
         style={{ width: inputWidth }}
         $answerState={answerState}
-        disabled={answerState === InputState.MoreError}
+        disabled={answerState === InputState.MoreError || answerState === InputState.Correct}
       />
       <Icon>
           {answerState === InputState.MoreError && <Error />}
