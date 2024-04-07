@@ -51,7 +51,7 @@ const [isLoading, setIsLoading] = useState(false)
     checkTheAnswer(userAnswer, setIsLoading)
     .then(res => res.isCorrect
       ? setAnswerState(InputState.Correct) 
-      : setAnswerState(answerState === InputState.Error ?  InputState.MoreError : InputState.Error))  
+      : setAnswerState((answerState === InputState.Error || answerState === InputState.Correcting) ?  InputState.MoreError : InputState.Error))  
   }
 
   if (isLoading) {
