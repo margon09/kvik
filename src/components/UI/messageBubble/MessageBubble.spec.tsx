@@ -8,9 +8,9 @@ const renderWithTheme = (component: ReactNode) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>)
 }
 
-describe('Button', () => {
+describe('MessageBubble', () => {
   it('renders correctly with children', () => {
-    renderWithTheme(<MessageBubble>Some message</MessageBubble>)
+    renderWithTheme(<MessageBubble isError>Some message</MessageBubble>)
     expect(screen.getByTestId('message-bubble')).toBeInTheDocument()
     expect(screen.getByTestId('message-bubble')).toHaveTextContent('Some message')
   })

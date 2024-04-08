@@ -3,13 +3,15 @@ import Parser from 'html-react-parser'
 
 interface Props {
   children: string
+  isError: boolean
 }
 
-const MessageBubble = ({children}: Props) => {
+const MessageBubble = ({children, isError }: Props) => {
   return (
     <StyledMessageContainer data-testid='message-bubble'>
-      <Triangle />
-      <StyledMessageBubble>{children && Parser(children)}
+      <Triangle isError={isError}/>
+      <StyledMessageBubble isError={isError}>
+        {children && Parser(children)}
       </StyledMessageBubble>
     </StyledMessageContainer>
   )

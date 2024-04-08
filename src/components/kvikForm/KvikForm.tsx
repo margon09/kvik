@@ -31,6 +31,8 @@ const [userAnswer, setUserAnswer] = useState('')
 const [problem, setProblem] = useState({} as any)
 const [answerState, setAnswerState] = useState(InputState.Default)
 const [isLoading, setIsLoading] = useState(false)
+const [error, setError] = useState('')
+const [errorFromPost, setErrorFromPost] = useState('')
 
 const svgComponents = useMemo(() => ({
     [InputState.Default]: KvikDefault,
@@ -47,7 +49,9 @@ const CurrentSVGComponent = svgComponents[answerState]
       .then(p => setProblem(p))
       .catch(error => {
         console.error('Error fetching problem:', error)
+        setError('Fejl ved indlæsning af problemet. Prøv igen senere')
       })
+      .finally(() => setIsLoading(false))
   }, [])
 
   const checkAnswer = () => { 
@@ -62,7 +66,11 @@ const CurrentSVGComponent = svgComponents[answerState]
     checkTheAnswer(userAnswer, setIsLoading)
     .then(res => res.isCorrect
       ? setAnswerState(InputState.Correct) 
-      : setAnswerState((answerState === InputState.Error || answerState === InputState.Correcting) ?  InputState.MoreError : InputState.Error))  
+      : setAnswerState((answerState === InputState.Error || answerState === InputState.Correcting) ?  InputState.MoreError : InputState.Error)) 
+    .catch(error => {
+      console.error('Error checking answer:', error)
+      setErrorFromPost('Fejl ved kontrol af svaret. Prøv igen senere.')
+    }) 
   }
 
   const handleChange = useCallback((value: string) => {
@@ -92,7 +100,7 @@ const CurrentSVGComponent = svgComponents[answerState]
           </KvikImgContainer>
           <TaskFormContainer>
             <TaskDescriptionInDanish>
-              <MessageBubble>{problem?.description}</MessageBubble>
+              <MessageBubble isError={!!(error || errorFromPost)}>{error || errorFromPost || problem?.description}</MessageBubble>
             </TaskDescriptionInDanish>
             <AnswerInEnglish data-cy='problem-text'> 
               {splitText.map((part: string, index: number) => (
@@ -110,15 +118,18 @@ const CurrentSVGComponent = svgComponents[answerState]
             </AnswerInEnglish>
           </TaskFormContainer>
         </Task>
-        <Button
-          type='submit' 
-          onClick={checkAnswer}
-          answerState = {answerState}
-        >
-          {answerState === InputState.Correct && <><span className='nextTask'>Næste opgave</span><NextTask /></>}
-          {answerState === InputState.MoreError && <><span className='tryAgain'>Prøv igen</span><TryAgain /></>}
-          {answerState !== InputState.Correct && answerState !== InputState.MoreError && <span>Tjek mit svar</span>}
-        </Button>
+        {
+          (!error || errorFromPost) &&
+            <Button
+              type='submit' 
+              onClick={checkAnswer}
+              answerState = {answerState}
+            >
+              {answerState === InputState.Correct && <><span className='nextTask'>Næste opgave</span><NextTask /></>}
+              {answerState === InputState.MoreError && <><span className='tryAgain'>Prøv igen</span><TryAgain /></>}
+              {answerState !== InputState.Correct && answerState !== InputState.MoreError && <span>Tjek mit svar</span>}
+            </Button>
+        }
       </TaskContainer>
       </>}
     </StyledFormContainer>

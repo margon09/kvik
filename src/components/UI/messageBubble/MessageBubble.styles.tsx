@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+interface StyledInputProps {
+  isError?: boolean
+}
+
 export const StyledMessageContainer = styled.div `
   width: 100%;
   height: auto;
@@ -8,7 +12,7 @@ export const StyledMessageContainer = styled.div `
   justify-content: flex-start;
   align-items: center;
 `
-export const Triangle = styled.div `
+export const Triangle = styled.div<StyledInputProps>`
   width: 0;
   height: 0;
   border-top: 18px solid transparent;
@@ -25,7 +29,7 @@ export const Triangle = styled.div `
     left: 0;
     width: 20px;
     height: 2px;
-    background: ${({ theme }) => theme.colors.input};
+    background: ${({ theme, isError }) => (isError ? theme.colors.danger : theme.colors.input)};
     transform-origin: 0 0;
   }
 
@@ -37,8 +41,9 @@ export const Triangle = styled.div `
     transform: translateY(-50%) rotate(38deg);
   }
 `
-export const StyledMessageBubble = styled.div `
+export const StyledMessageBubble = styled.div<StyledInputProps>`
   padding: 1rem;
-  border: 2px solid ${({ theme }) => theme.colors.input};
+  border: 2px solid ${({ theme, isError }) => (isError ? theme.colors.danger : theme.colors.input)};
   border-radius: ${({ theme }) => theme.borderRadiusMessage};
+  color: ${({ theme, isError }) => (isError ? theme.colors.danger : 'inherit')};
 `
